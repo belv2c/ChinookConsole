@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ChinookConsole.DataAccess;
-using System.Data.SqlClient;
 
 namespace ChinookConsole
 {
@@ -28,13 +23,12 @@ namespace ChinookConsole
                         var invoices = invoiceInfoQuery.GetAgent();
                         //var invoiceDetails = invoiceInfoQuery.GetInvoiceInfo();
 
-                        Console.WriteLine("");
+                        Console.WriteLine("Sales agents and their corresponding invoice id's:");
 
                         foreach (var invoice in invoices)
                         {
-                            Console.WriteLine($"Sales Rep: {invoice.Name}, Invoice ID: {invoice.InvoiceId}");
+                            Console.WriteLine($"Sales Agent Name: {invoice.Name}, Invoice ID: {invoice.InvoiceId}");
                         }
-
                         Console.ReadLine();
                         break;
                 }
