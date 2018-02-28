@@ -1,7 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Data.SqlClient;
+﻿using ChinookConsole.DataAccess.Models;
+using System;
+using System.Collections.Generic;
 using System.Configuration;
-using ChinookConsole.DataAccess.Models;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace ChinookConsole.DataAccess
 {
@@ -9,6 +14,7 @@ namespace ChinookConsole.DataAccess
     {
         readonly string _connectionString = ConfigurationManager.ConnectionStrings["Chinook"].ConnectionString;
 
+        // Provide a query that shows the invoices associated with each sales agent. 
         public List<SalesAgent> GetAgent()
         {
             using (var connection = new SqlConnection(_connectionString))
@@ -39,6 +45,7 @@ namespace ChinookConsole.DataAccess
             }
         }
 
+        // Provide a query that shows the Invoice Total, Customer name, Country and Sale Agent name for all invoices.
         public List<InvoiceInfo> GetInvoiceTotal()
         {
             using (var connection = new SqlConnection(_connectionString))
@@ -52,8 +59,6 @@ namespace ChinookConsole.DataAccess
                                     join invoice i on i.CustomerId = c.CustomerId
                                     where e.title = 'Sales Support Agent'";
 
-
-              
                 var reader = cmd.ExecuteReader();
 
                 var InvoiceTotal = new List<InvoiceInfo>();
@@ -71,6 +76,27 @@ namespace ChinookConsole.DataAccess
                     InvoiceTotal.Add(invoiceTotalInfo);
                 }
                 return InvoiceTotal;
+            }
+        }
+
+        // Looking at the InvoiceLine table, provide a query that COUNTs the number of line items for an Invoice with a parameterized Id from user input
+        public int GetLineItems(int consoleUserInput)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                var cmd = connection.CreateCommand();
+                cmd.CommandText = @"select count(*) as [LineItemTotals] 
+                                        from InvoiceLine
+                                        where InvoiceId = @invoiceId";
+
+                var invoiceId = new SqlParameter("@invoiceId", SqlDbType.Int);
+                invoiceId.Value = consoleUserInput;
+                cmd.Parameters.Add(invoiceId);
+
+
+                var invoiceLineCount = (int.Parse(cmd.ExecuteScalar().ToString()));
+                return invoiceLineCount;
             }
         }
     }

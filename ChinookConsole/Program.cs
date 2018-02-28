@@ -45,15 +45,27 @@ namespace ChinookConsole
                         }
                         Console.ReadLine();
                         break;
+
+                    case '3':
+                        Console.Clear();
+                        Console.WriteLine("Type invoice ID to view the amount of line items it has:");
+
+                        var consoleUserInput = Console.ReadLine();
+                        var invoiceInfoQuery3 = new InvoiceInfoQuery();
+                        var lineItemTotals = invoiceInfoQuery3.GetLineItems(int.Parse(consoleUserInput));
+
+                        Console.WriteLine($"This invoice has {lineItemTotals} line items.");
+                        Console.ReadLine();
+                        break;
                 }
             }
-
 
             ConsoleKeyInfo MainMenu()
             {
                 View mainMenu = new View()
-                        .AddMenuOption("Show the invoices associated with each sales agent")
-                        .AddMenuOption("Show the invoice total, customer name, country and sales agent name for all invoices")
+                        .AddMenuOption("View the invoices associated with each sales agent")
+                        .AddMenuOption("View the invoice total, customer name, country and sales agent name for all invoices")
+                        .AddMenuOption("View the number of line items for an invoice")
                         .AddMenuText("Press 0 to exit.");
 
                 Console.Write(mainMenu.GetFullMenu());
